@@ -1,0 +1,13 @@
+[[modes]]
+[modes.resp]
+host = "127.0.0.1"
+port = 9101
+salt = "123456792KQ"
+
+[[modes]]
+[modes.http]
+host = "127.0.0.1"
+port = 9102
+
+[storage.sqlite]
+url = ":memory:"
