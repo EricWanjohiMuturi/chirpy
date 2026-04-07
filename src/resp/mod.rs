@@ -283,7 +283,7 @@ async fn process_resp_command(
         | (Command::Ack { jid }, ClientState::Quiet(_))
         | (Command::Ack { jid }, ClientState::Terminating(_)) => {
             let mut server = server.write().await;
-            match server.ack_job(jid) {
+            match server.ack_job(jid).await {
                 Ok(_) => Ok(format!("{}OK\r\n", RESP_SIMPLE_STRING)),
                 Err(e) => Ok(format!("{}{}\r\n", RESP_ERROR, e)),
             }
@@ -317,7 +317,7 @@ async fn process_resp_command(
             ClientState::Terminating(_),
         ) => {
             let mut server = server.write().await;
-            match server.fail_job(jid, errtype, message, backtrace.clone()) {
+            match server.fail_job(jid, errtype, message, backtrace.clone()).await {
                 Ok(_) => Ok(format!("{}OK\r\n", RESP_SIMPLE_STRING)),
                 Err(e) => Ok(format!("{}{}\r\n", RESP_ERROR, e)),
             }
