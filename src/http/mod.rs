@@ -114,7 +114,7 @@ async fn ack_job(
     axum::extract::Path(jid): axum::extract::Path<String>,
 ) -> impl IntoResponse {
     let mut server = server.write().await;
-    match server.ack_job(&jid) {
+    match server.ack_job(&jid).await {
         Ok(_) => (
             StatusCode::OK,
             Json(ApiResponse::success(
@@ -143,12 +143,15 @@ async fn fail_job(
     Json(fail_cmd): Json<FailCommand>,
 ) -> impl IntoResponse {
     let mut server = server.write().await;
-    match server.fail_job(
-        &jid,
-        &fail_cmd.errtype,
-        &fail_cmd.message,
-        fail_cmd.backtrace,
-    ) {
+    match server
+        .fail_job(
+            &jid,
+            &fail_cmd.errtype,
+            &fail_cmd.message,
+            fail_cmd.backtrace,
+        )
+        .await
+    {
         Ok(_) => (
             StatusCode::OK,
             Json(ApiResponse::success(

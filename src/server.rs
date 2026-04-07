@@ -6,6 +6,7 @@ use std::{
 
 use apalis::prelude::BoxDynError;
 use apalis_sqlite::SqlitePool;
+use serde_json::json;
 use tokio::sync::RwLock;
 
 use crate::{
@@ -45,18 +46,28 @@ impl<Mode> Server<Mode> {
         self.backend.fetch_job(queues, wid).await
     }
 
-    pub fn ack_job(&mut self, _jid: &str) -> Result<(), String> {
-        todo!()
+    pub async  fn ack_job(&mut self, jid: &str) -> Result<(), String> {
+        let wid = self.working_jobs.get(jid).unwrap();
+        self.backend.ack_job(jid, wid).await?;
+        Ok(())
     }
 
-    pub fn fail_job(
+    pub async fn fail_job(
         &mut self,
-        _jid: &str,
-        _err_type: &str,
-        _message: &str,
-        _backtrace: Vec<String>,
+        jid: &str,
+        err_type: &str,
+        message: &str,
+        backtrace: Vec<String>,
     ) -> Result<(), String> {
-        todo!()
+        let wid = self.working_jobs.get(jid).unwrap();
+        let res = json!({
+            "error_type": err_type,
+            "message": message,
+            "backtrace": backtrace
+        });
+        let res = serde_json::to_string(&res).unwrap();
+        self.backend.fail_job(jid, wid, &res).await?;
+        Ok(())
     }
 
     pub fn flush(&mut self) {

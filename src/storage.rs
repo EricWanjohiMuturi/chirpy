@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use apalis::prelude::{TaskBuilder, TaskId, WorkerContext};
+use apalis::prelude::{Status, TaskBuilder, TaskId, WorkerContext};
 use apalis_sqlite::{Config, SqlitePool};
 use futures::FutureExt;
 use ulid::Ulid;
@@ -54,7 +54,42 @@ impl Storage {
         }
     }
 
-    // ack_job
+    pub async fn ack_job(&self, task_id: &str, worker_id: &String) -> Result<(), String> {
+        match self {
+            Self::Sqlite(pool) => {
+                apalis_sqlite::queries::ack_task::ack_task(
+                    pool,
+                    task_id,
+                    worker_id,
+                    "",
+                    &Status::Done,
+                    0,
+                )
+                .await
+                .unwrap();
+            }
+        }
 
-    // fail_job
+        Ok(())
+    }
+
+    pub async fn fail_job(&self, task_id: &str, worker_id: &str, res: &str) -> Result<(), String> {
+        match self {
+            Self::Sqlite(pool) => {
+                apalis_sqlite::queries::ack_task::ack_task(
+                    pool,
+                    task_id,
+                    worker_id,
+                    res,
+                    &Status::Failed,
+                    0,
+                )
+                .await
+                .unwrap();
+            }
+        }
+
+        Ok(())
+    }
+
 }
