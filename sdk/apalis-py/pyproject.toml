@@ -1,0 +1,10 @@
+[project]
+name = "apalis-py"
+version = "0.1.0"
+description = "A Python SDK for Chirpy, the language-agnostic standalone job server built on apalis."
+authors = [
+    { name = "Muturi Eric Wanjohi", email = "emuturi124@gmail.com" }
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
