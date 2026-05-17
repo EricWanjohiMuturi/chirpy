@@ -7,4 +7,16 @@ authors = [
 ]
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "anyio>=4.13.0",
+]
+
+[dependency-groups]
+prod = [
+    "anyio>=4.13.0",
+]
+dev = [
+    "pytest>=9.0.3",
+    "pytest-timeout>=2.4.0",
+    "python-dotenv>=1.2.2",
+]
