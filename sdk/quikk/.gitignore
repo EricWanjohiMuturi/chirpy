@@ -16,3 +16,8 @@ build/
 htmlcov/
 .tox/
 .pytest_cache/
+
+# Local server config and SQLite data (see config.example.toml for the template)
+chirpy.toml
+chirpy.db
+chirpy.db-*

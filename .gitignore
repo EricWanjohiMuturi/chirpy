@@ -24,3 +24,8 @@ target
 # Added by cargo
 
 /target
+
+# Local server config and SQLite data (see config.example.toml for the template)
+chirpy.toml
+chirpy.db
+chirpy.db-*

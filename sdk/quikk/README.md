@@ -43,14 +43,14 @@ The raw I/O foundation everything else sits on. No protocol knowledge at this le
 - [x] **Raw Send Primitive:** Writes a command string to the socket with a guaranteed `\r\n` terminator.
 - [x] **Public API:** `Connection`, `parse_response`, and all response/error types are importable directly from `quikk`.
 
-### Phase 2: Protocol & Type System *(next up)*
+### Phase 2: Protocol & Type System ✅ Complete
 Map the Chirpy protocol to Python. This layer knows the shape of every command and response.
-- [ ] **Pydantic Models:** Define `Job`, `Failure`, and all command payload types (`HelloData`, `BeatData`, `FailData`, etc.) mirroring `job.rs` and `command.rs`.
-- [ ] **Command Serializers:** Python objects → wire-format strings (e.g. `PUSH <json>`, `ACK {"jid":"..."}`, `FETCH ["queue"]`).
-- [ ] **Authentication:** Implement SCRAM-SHA-256 password hashing (`sha256(password + salt)` iterated `n` times) to support password-protected servers.
-- [ ] **`Job` Builder:** Fluent interface for constructing jobs with defaults for `queue`, `retry`, and `reserve_for`.
+- [x] **Pydantic Models:** Define `Job`, `Failure`, and all command payload types (`HelloData`, `BeatData`, `FailData`, etc.) mirroring `job.rs` and `command.rs`.
+- [x] **Command Serializers:** Python objects → wire-format strings (e.g. `PUSH <json>`, `ACK {"jid":"..."}`, `FETCH ["queue"]`).
+- [x] **Authentication:** Implement SCRAM-SHA-256 password hashing (`sha256(password + salt)` iterated `n` times) to support password-protected servers.
+- [x] **`Job` Builder:** Fluent interface for constructing jobs with defaults for `queue`, `retry`, and `reserve_for`.
 
-### Phase 3: Connection & Handshake
+### Phase 3: Connection & Handshake *(next up)*
 A managed `Connection` object that speaks the Chirpy protocol on top of Phase 1 transport.
 - [ ] **Handshake Orchestration:** On connect, receive `HI`, send `HELLO` (with or without auth), assert `+OK`.
 - [ ] **Producer vs. Worker Modes:** `HELLO` payload differs — producers send minimal fields; workers include `wid`, `hostname`, `pid`, `labels`.
